@@ -1,0 +1,41 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="logo">Orbit</div>
+    <nav class="nav">
+      <button class="new-btn" (click)="clear()">+ New chat</button>
+    </nav>
+    <div class="foot">v1 • Local</div>
+  </aside>
+
+  <main class="main">
+    <div class="main-header">
+      <h1>Orbit</h1>
+      <p class="hint">A minimal assistant — type below and press Enter</p>
+    </div>
+
+    <section class="chat-area" #chatContainer>
+      <div *ngFor="let m of messages; index as i" class="chat-row" [class.user]="m.sender==='user'">
+        <div class="meta">{{ m.sender === 'user' ? 'You' : 'Orbit' }}</div>
+        <div class="text">{{ m.text }}</div>
+      </div>
+
+      <div class="chat-row loading" *ngIf="loading">
+        <div class="meta">Orbit</div>
+        <div class="text typing">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="composer">
+      <textarea
+        [(ngModel)]="userInput"
+        (keydown.enter)="onEnter($any($event))"
+        placeholder="Send a message..."
+        rows="1"
+        aria-label="Message"
+      ></textarea>
+      <button (click)="send()">Send</button>
+    </footer>
+  </main>
+</div>

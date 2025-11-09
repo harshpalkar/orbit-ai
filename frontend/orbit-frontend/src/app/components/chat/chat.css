@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
+
+:host { font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+
+/* layout */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  background: #0f1115;
+  color: #e6eef8;
+}
+
+/* left narrow sidebar */
+.sidebar {
+  width: 220px;
+  min-width: 180px;
+  background: linear-gradient(180deg,#0c0d11 0%, #0b0c10 100%);
+  border-right: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  gap: 16px;
+}
+.logo {
+  font-weight: 600;
+  color: #9be7e1;
+  font-size: 1.1rem;
+}
+.nav { flex: 1; display:flex; align-items:flex-start; }
+.new-btn {
+  background: transparent;
+  color: #cfeff0;
+  border: 1px dashed rgba(255,255,255,0.03);
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.foot { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+/* main area */
+.main { flex: 1; display:flex; flex-direction:column; }
+.main-header {
+  padding: 22px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+}
+.main-header h1 { margin: 0; color: #dff6f3; font-size: 1.15rem; }
+.hint { margin: 4px 0 0 0; color: rgba(255,255,255,0.5); font-size: 13px; }
+
+/* chat area (stream of simple messages like ChatGPT) */
+.chat-area {
+  padding: 24px 28px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.00), rgba(255,255,255,0.01));
+}
+.chat-row { display:flex; gap:12px; align-items:flex-start; max-width:900px; }
+/* meta label (small) */
+.chat-row .meta { width:64px; font-size:12px; color: rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.06em; }
+/* text — no bubble, plain document-like appearance */
+.chat-row .text {
+  background: transparent;
+  color: #e6eef8;
+  padding: 6px 10px;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 17px;
+  border-left: 3px solid transparent;
+}
+.chat-row.user .text { color: #c8fff3; border-left-color: #00e0c7; }
+.text { a { color: #4ad1ff; text-decoration: underline; }
+}
+
+/* loading typing */
+.typing { display:flex; gap:6px; align-items:center; color:rgba(255,255,255,0.6); }
+.typing span { display:inline-block; width:7px; height:7px; background:#9aaab0; border-radius:50%; animation:blink 1.2s infinite; }
+.typing span:nth-child(2){ animation-delay:0.18s } .typing span:nth-child(3){ animation-delay:0.36s }
+@keyframes blink { 0%,80%,100%{ transform:scale(0.7); opacity:0.3 } 40%{ transform:scale(1); opacity:1 } }
+
+/* composer fixed at bottom — simple like ChatGPT */
+.composer {
+  height: 86px;
+  border-top: 1px solid rgba(255,255,255,0.03);
+  display:flex;
+  align-items:center;
+  padding: 14px 20px;
+  gap:12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+}
+.composer textarea {
+  flex: 1;
+  resize: none;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.03);
+  color: #e6eef8;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 48px;
+  max-height: 150px;
+  outline: none;
+}
+.composer button {
+  background: linear-gradient(180deg,#00e0c7,#0072ff);
+  color: #021119;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .chat-row .meta { display:none; width:auto; }
+  .main-header { padding: 14px; }
+  .chat-area { padding: 14px; }
+  .composer { padding: 10px; }
+}
