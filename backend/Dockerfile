@@ -1,13 +1,18 @@
+# Build frontend first
+FROM node:18 AS frontend
+WORKDIR /app/frontend
+COPY frontend/orbit-frontend/ .
+RUN npm install && npm run build
+
+# Backend build
 FROM python:3.11-slim
-
 WORKDIR /app
+COPY backend/requirements.txt .
+RUN pip install -r requirements.txt
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy backend + frontend build output
+COPY backend/ .
+COPY --from=frontend /app/frontend/dist/orbit-frontend /app/static
 
-COPY . .
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "1000"]
-
-# Expose port (Render expects 10000)
 EXPOSE 10000
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-10000}"]
