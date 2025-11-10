@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class OrbitService {
-  private apiUrl = 'https://orbit-ai-ob63.onrender.com'; // FastAPI backend
+  private apiUrl = 'https://orbit-ai-ob63.onrender.com/chat'; // FastAPI backend
 
   constructor(private http: HttpClient) {}
 
