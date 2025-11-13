@@ -4,7 +4,10 @@ import httpx # type: ignore
 import os
 
 router = APIRouter()
-OLLAMA_API = os.getenv("OLLAMA_API", "http://localhost:11434")
+# OLLAMA_API = os.getenv("OLLAMA_API", "http://localhost:11434")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    raise Exception("GROQ_API_KEY environment variable is not set.")
 
 class ChatRequest(BaseModel):
     prompt: str
@@ -14,16 +17,23 @@ async def chat(request: ChatRequest):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                f"{OLLAMA_API}/api/generate",
-                json={
-                    "model": "phi3",
-                    "prompt": f"You are Orbit, an intelligent AI assistant.\nHarsh: {request.prompt}\nOrbit:",
-                    "stream": False
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {GROQ_API_KEY}",
+                    "Content-Type": "application/json"
                 },
-                timeout=180
+                json={
+                    "model": "llama3-8b-8192",
+                    "messages": [
+                        {"role": "system", "content": "You are Orbit, an intelligent AI assistant."},
+                        {"role": "user", "content": request.prompt}
+                    ],
+                    "temperature": 0.7,
+                }
             )
             response.raise_for_status()
             data = response.json()
-            return {"reply": data.get("response", "No reply.")}
+            reply_text = data["choices"][0]["message"]["content"]
+            return {"reply": reply_text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
